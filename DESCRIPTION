@@ -1,0 +1,16 @@
+Package: PolyhedralCubature
+Title: Integration Over Convex Polyhedra
+Version: 0.0.0.9000
+Authors@R: 
+    person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+License: GPL-3
+URL: https://github.com/stla/PolyhedralCubature
+BugReports: https://github.com/stla/PolyhedralCubature/issues
+Imports: 
+    gmp,
+    rcdd,
+    SimplicialCubature,
+    tessellation
+Encoding: UTF-8
+RoxygenNote: 7.2.3
