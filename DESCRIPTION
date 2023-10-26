@@ -1,5 +1,5 @@
 Package: polyhedralCubature
-Title: Multiple Integration Over Convex Polyhedra
+Title: Multiple Integration over Convex Polyhedra
 Version: 1.0.0
 Authors@R: 
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))

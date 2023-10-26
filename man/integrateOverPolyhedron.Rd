@@ -8,7 +8,8 @@ integrateOverPolyhedron(f, A, b)
 }
 \arguments{
 \item{f}{either a function, a \strong{spray} polynomial, or a
-\strong{qspray} polynomial}
+\strong{qspray} polynomial; its number of variables must match the
+number of columns of the matrix \code{A}}
 
 \item{A, b}{matrix and vector defining the linear inequalities which must be
 in numeric mode or, for exactness, in character mode, with an integer or
