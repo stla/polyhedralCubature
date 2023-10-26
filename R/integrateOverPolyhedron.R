@@ -1,17 +1,48 @@
-library(rcdd)
-library(tessellation)
-library(SimplicialCubature)
-library(spray)
-library(qspray)
-library(gmp) # to load in .onLoad function
-
+#' @title Multiple integral over a polyhedron
+#' @description Multiple integral over a convex polyhedron given by a set of
+#'   linear inequalities. See the vignette for explanations and examples.
+#'
+#' @param f either a function, a \strong{spray} polynomial, or a
+#'   \strong{qspray} polynomial
+#' @param A,b matrix and vector defining the linear inequalities which must be
+#'   in numeric mode or, for exactness, in character mode, with an integer or
+#'   a fraction as each entry; if \code{f} is a \strong{qspray} polynomial,
+#'   then \code{A} and \code{b} will be converted to character mode if they
+#'   are in numeric mode, with the function \code{\link[rcdd]{d2q}}
+#'
+#' @return There are three possible values: an output of
+#'   \code{\link[SimplicialCubature]{adaptIntegrateSimplex}} if
+#'   \code{f} is a function, an output of
+#'   \code{\link[SimplicialCubature]{integrateSimplexPolynomial}} if
+#'   \code{f} is a \strong{spray} polynomial, or a character representing
+#'   the value of the integral as a fraction if
+#'   \code{f} is a \strong{qspray} polynomial.
+#' @export
+#'
 #' @importFrom rcdd makeH validcdd scdd q2d d2q qsum
 #' @importFrom tessellation delaunay getDelaunaySimplicies
 #' @importFrom SimplicialCubature adaptIntegrateSimplex definePoly integrateSimplexPolynomial
 #' @importFrom spray is.spray index coeffs
 #' @importFrom qspray integratePolynomialOnSimplex
-
-
+#'
+#' @examples
+#' A <- rbind(
+#'   c(-1, 0, 0), # -x
+#'   c( 1, 0, 0), # x
+#'   c( 0,-1, 0), # -y
+#'   c( 1, 1, 0), # x+y
+#'   c( 0, 0,-1), # -z
+#'   c( 1, 1, 1)  # x+y+z
+#' )
+#' b <- c(
+#'   5, 4,  # -5 < x < 4       <=> -x < 5  &  x < 4
+#'   5, 3,  # -5 < y < 3-x     <=> -y < 5  &  x+y < 3
+#'   10, 6  # -10 < z < 6-x-y  <=> -z < 10  &  x+y+z < 6
+#' )
+#' f <- function(x, y, z) {
+#'   x*y + 5*cos(z)
+#' }
+#' integrateOverPolyhedron(f, A, b)
 integrateOverPolyhedron <- function(f, A, b) {
   stopifnot(is.matrix(A))
   stopifnot(nrow(A) == length(b))
@@ -91,34 +122,3 @@ integrateOverPolyhedron <- function(f, A, b) {
     qsum(results)
   }
 }
-
-
-A <- rbind(
-  c(-1, 0, 0), # -x
-  c( 1, 0, 0), # x
-  c( 0,-1, 0), # -y
-  c( 1, 1, 0), # x+y
-  c( 0, 0,-1), # -z
-  c( 1, 1, 1)  # x+y+z
-)
-b <- c(
-  5, 4,  # -5 < x < 4       <=> -x < 5  &  x < 4
-  5, 3,  # -5 < y < 3-x     <=> -y < 5  &  x+y < 3
-  10, 6  # -10 < z < 6-x-y  <=> -z < 10  &  x+y+z < 6
-)
-A <- d2q(A)
-b <- d2q(b)
-f <- function(x, y, z) {
-  x + y*z
-}
-
-# function
-integrateOverPolyhedron(f, A, b)
-
-# spray
-P <- f(lone(1, 3), lone(2, 3), lone(3, 3))
-integrateOverPolyhedron(P, A, b)
-
-# qspray
-Q <- f(qlone(1), qlone(2), qlone(3))
-integrateOverPolyhedron(Q, A, b)
