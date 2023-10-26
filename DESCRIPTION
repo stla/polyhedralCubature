@@ -1,9 +1,11 @@
 Package: PolyhedralCubature
-Title: Integration Over Convex Polyhedra
+Title: Multiple Integration Over Convex Polyhedra
 Version: 0.0.0.9000
 Authors@R: 
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Evaluation of multiple integrals over convex polyhedra. This
+    is useful when the bounds of the integrals are some linear
+    combinations of the variables.
 License: GPL-3
 URL: https://github.com/stla/PolyhedralCubature
 BugReports: https://github.com/stla/PolyhedralCubature/issues
