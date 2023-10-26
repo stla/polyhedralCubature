@@ -76,7 +76,9 @@ integrateOverPolyhedron <- function(f, A, b) {
     V <- q2d(V)
   }
   if(any(V[, 1L] != 0) || any(V[, 2L] != 1)) {
-    stop("Invalid arguments `A` and/or `b`.")
+    stop(
+      "The arguments `A` and/or `b` do not define a convex polyhedron."
+    )
   }
   # Delaunay
   vertices <- V[, -c(1L, 2L)]
@@ -108,7 +110,13 @@ integrateOverPolyhedron <- function(f, A, b) {
       body(g) <- parse(text = bdy)
       adaptIntegrateSimplex(g, U)
     } else if(is.spray(f)) {
-      P <- definePoly(f[["value"]], index(f))
+      powers <- index(f)
+      if(ncol(powers) != d) {
+        stop(
+          "The number of variables in `f` does not match the dimension."
+        )
+      }
+      P <- definePoly(f[["value"]], powers)
       integrateSimplexPolynomial(P, U)
     }
   } else { # qspray

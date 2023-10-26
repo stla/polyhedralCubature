@@ -1,6 +1,6 @@
 Package: polyhedralCubature
 Title: Multiple Integration Over Convex Polyhedra
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
 Description: Evaluation of multiple integrals over convex polyhedra. This
