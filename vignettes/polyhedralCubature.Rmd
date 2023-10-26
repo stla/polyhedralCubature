@@ -100,3 +100,34 @@ p <- f(x, y, z)
 integrateOverPolyhedron(p, A, b)
 ```
 
+The first step in `integrateOverPolyhedron` consists in finding the vertices 
+of the polyhedron from the set of linear inequalities. It is possible, and 
+better, to use exact arithmetic for this step, by defining the matrix `A` 
+and the vector `b` in character mode, each entry being an integer or a
+fraction like `"1/3"`. Here we can simply do:
+
+```{r character_mode}
+storage.mode(A) <- "character"
+storage.mode(b) <- "character"
+```
+
+But this is not the way to use if you have a fraction like `1/3` in an entry:
+
+```{r as_character_fraction}
+as.character(1/3)
+```
+
+Instead, you must directly define `A` and `b` in character mode and enter 
+`"1/3"` for this entry.
+
+Finally, when $f$ is a polynomial, you can get the exact value of the integral 
+given as a fraction, by using a **qspray** polynomial instead of a **spray** 
+polynomial:
+
+```{r integrate_qspray}
+library(qspray)
+x <- qlone(1); y <- qlone(2); z <- qlone(3)
+q <- f(x, y, z)
+integrateOverPolyhedron(q, A, b)
+```
+
