@@ -22,7 +22,7 @@
 #' @importFrom rcdd makeH validcdd scdd q2d d2q qsum
 #' @importFrom tessellation delaunay getDelaunaySimplicies
 #' @importFrom SimplicialCubature adaptIntegrateSimplex definePoly integrateSimplexPolynomial
-#' @importFrom spray is.spray index coeffs
+#' @importFrom spray is.spray index
 #' @importFrom qspray integratePolynomialOnSimplex
 #'
 #' @examples
@@ -108,7 +108,7 @@ integrateOverPolyhedron <- function(f, A, b) {
       body(g) <- parse(text = bdy)
       adaptIntegrateSimplex(g, U)
     } else if(is.spray(f)) {
-      P <- definePoly(coeffs(f), index(f))
+      P <- definePoly(f[["value"]], index(f))
       integrateSimplexPolynomial(P, U)
     }
   } else { # qspray
