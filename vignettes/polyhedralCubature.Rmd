@@ -16,6 +16,77 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(polyhedralCubature)
+This package allows to evaluate multiple integrals like:
+$$
+\int_{-5}^4\int_{-5}^{3-x}\int_{-10}^{6-x-y} f(x,y,z)
+\,\mathrm{d}z\,\mathrm{d}y\,\mathrm{d}x
+$$
+
+Using base R only, a possibility is to nest the `integrate` function to 
+evaluate such an integral:
+
+```{r}
+f <- function(x, y, z) x*(x+1) - y*z^2
+integrate(Vectorize(function(x) { 
+  integrate(Vectorize(function(y) { 
+    integrate(function(z) { 
+      f(x,y,z) 
+    }, -10, 6 - x - y)$value
+   }), -5, 3 - x)$value 
+}), -5, 4) 
 ```
+
+This approach works well in general. But it has one default: the estimate of 
+the absolute error it returns is not reliable, because the estimates of the 
+absolute errors of the inner integrals are not taken into account.
+
+Here is how to proceed with the **polyhedralCubature** package.
+The domain of integration is defined by the set of inequalities:
+$$
+\left\{\begin{matrix}
+-5  & \leq & x & \leq & 4     \\
+-5  & \leq & y & \leq & 3-x   \\
+-10 & \leq & z & \leq & 6-x-y
+\end{matrix}
+\right.
+$$
+which is equivalent to 
+$$
+\left\{\begin{matrix}
+-x & \leq & 5 \\
+x & \leq & 4 \\
+-y & \leq & 5 \\
+x+y & \leq & 3 \\
+-z & \leq & 10 \\
+x+y+z & \leq & 6
+\end{matrix}
+\right..
+$$
+This set of inequalities defines a convex polyhedron. 
+In order to use **polyhedralCubature**, you have to construct the matrix `A` 
+defining the linear combinations of the variables, and the vector `b` giving 
+the upper bounds of these linear combinations:
+
+```{r Ab}
+A <- rbind(
+  c(-1, 0, 0), # -x
+  c( 1, 0, 0), # x
+  c( 0,-1, 0), # -y
+  c( 1, 1, 0), # x+y
+  c( 0, 0,-1), # -z
+  c( 1, 1, 1)  # x+y+z
+)
+b <- c(5, 4, 5, 3, 10, 6)
+```
+
+Then you can use the `integrateOverPolyhedron` function:
+
+```{r integrate_function}
+library(polyhedralCubature)
+f <- function(x, y, z) {
+  x*(x+1) - y*z^2
+}
+integrateOverPolyhedron(f, A, b)
+```
+
+
