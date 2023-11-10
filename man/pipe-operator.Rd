@@ -3,6 +3,7 @@
 \docType{import}
 \name{pipe-operator}
 \alias{pipe-operator}
+\alias{\%>\%}
 \title{Pipe operator}
 \description{
 This is the 'magrittr' pipe operator. We import it in this

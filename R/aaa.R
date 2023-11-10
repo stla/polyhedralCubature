@@ -15,4 +15,5 @@
 #' @export %>%
 #' @docType import
 #' @name pipe-operator
+#' @aliases %>%
 NULL
