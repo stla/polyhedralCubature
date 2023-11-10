@@ -89,6 +89,19 @@ f <- function(x, y, z) {
 integrateOverPolyhedron(f, A, b)
 ```
 
+Alternatively, you can use the `getAb` function to get `A` and `b` with the 
+help of the user-friendly syntax of the **ompr** package:
+
+```{r getAb}
+library(ompr)
+model <- MIPModel() %>%
+  add_variable(x) %>% add_variable(y) %>% add_variable(z) %>%
+  add_constraint(-5 <= x) %>% add_constraint(x <= 4) %>%
+  add_constraint(-5 <= y) %>% add_constraint(y <= 3 - x) %>%
+  add_constraint(-10 <= z) %>% add_constraint(z <= 6 - x - y)
+getAb(model)
+```
+
 Observe that the function $f$ is a polynomial here. Then one can get the 
 exact value of the integral by feeding `integrateOverPolyhedron` with a 
 **spray** polynomial instead of a function:
