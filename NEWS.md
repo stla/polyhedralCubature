@@ -1,4 +1,4 @@
-# polyhedralCubature 1.1.0 (2023-11-??)
+# polyhedralCubature 1.1.0 (2023-11-22)
 
 New function `getAb` to get the representation of the linear inequalities as 
 the matrix `A` and the vector `b` with a user-friendly syntax.
