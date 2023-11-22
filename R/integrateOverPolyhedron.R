@@ -84,9 +84,9 @@ integrateOverPolyhedron <- function(f, A, b) {
   # Delaunay
   vertices <- V[, -c(1L, 2L)]
   if(is_qspray) {
-    dlny <- delaunay(q2d(vertices))
+    dlny <- delaunay(q2d(vertices), atinfinity = TRUE)
   } else {
-    dlny <- delaunay(vertices)
+    dlny <- delaunay(vertices, atinfinity = TRUE)
   }
   simplices <- getDelaunaySimplicies(dlny)
   nsimplices <- length(simplices)
